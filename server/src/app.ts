@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express"
 // import { openDb, runQuery } from "./dal/dal";
 import cors from "cors";
-import { routes } from "./controlers/appRoutes";
+import { routes } from "./controllers/appRoutes";
 
 const server = express();
 
@@ -21,6 +21,6 @@ server.get("/ping", (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send("PONG");
 });
 
-server.use(routes);
+server.use("/api", routes);
 
 server.listen(3030, () => console.log(`Express server started.\nhttp://localhost:3030`));

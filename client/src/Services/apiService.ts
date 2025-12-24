@@ -1,61 +1,39 @@
 // Backend base URL
-const BASE_URL = "http://localhost:3030";
+const BASE_URL = "http://localhost:3030/api";
 
-export interface Account {
+export interface Server {
     id: number;
     name: string;
+    ip: string;
+    hosting_company: string;
+    status: string;
+    created_at: string;
 }
 
-export interface AccountOperation {
-    id: number;
-    accountID: number;
-    typeOperation: string;
-    sumMoney: number;
-    sumPayments: number | null;
-    dateOperation: string;
-    Interest: number | null;
-}
-export interface CreateAccountOperation {
-    id?: number;
-    accountID: number;
-    typeOperation: string;
-    sumMoney: number;
-    sumPayments: number | null;
-    dateOperation: string;
-    Interest: number | null;
-}
 
-export async function getAccountOperationById(accountId: number): Promise<AccountOperation[]> {
+export async function getAllServers(): Promise<Server[]> {
     // console.log(accountId);
-    const res = await fetch(`${BASE_URL}/accountOperation`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ accountId })
-    });
+    const res = await fetch(`${BASE_URL}/servers`);
     
-
     if (!res.ok) {
-        throw new Error("Failed to fetch accountOperation");
+        throw new Error("Failed to fetch servers");
     }
 
     return res.json();
 }
 
-
-export async function addOperation(payload: CreateAccountOperation): Promise<AccountOperation> {
-    console.log(JSON.stringify(payload));
+export async function replaceServerStatus(serverId: number): Promise<Server> {
     
-    const res = await fetch(`${BASE_URL}/addOperation`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+    const res = await fetch(`${BASE_URL}/status`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body:  JSON.stringify({ "serverId": serverId })
     });
 
     if (!res.ok) {
-        throw new Error("Failed to create operation");
+        throw new Error("Failed to update server status");
     }
-
     return res.json();
 }
